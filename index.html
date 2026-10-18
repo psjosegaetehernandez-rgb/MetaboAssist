@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaboAssist 15.0 | Suite Clínica Completa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-area">
+            <span class="icon">🧬</span>
+            <h1>MetaboAssist <span class="version">15.0</span></h1>
+        </div>
+        <div class="header-actions">
+            <span class="status">Sistema de Apoyo a la Decisión Clínica</span>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <aside class="sidebar">
+            <nav>
+                <button class="nav-item active" data-target="mapa">🧍‍♂️ Escáner Interactivo</button>
+                <button class="nav-item" data-target="bioquimica">🧬 Vías Biológicas</button>
+                <button class="nav-item" data-target="enciclopedia">📚 Módulos Clínicos</button>
+                <button class="nav-item" data-target="herramientas">🧮 Herramientas Clínicas</button>
+                <button class="nav-item" data-target="fisiologia">🔬 Evidencia GRADE</button>
+                <button class="nav-item" data-target="protocolo">📋 Protocolo TCC+ACT</button>
+                <button class="nav-item" data-target="paciente">📊 Panel Paciente</button>
+            </nav>
+            <div class="sidebar-footer">
+                <p>v15.0 · CDSS Completo</p>
+            </div>
+        </aside>
+
+        <section class="content-area">
+            <!-- 1. ESCÁNER INTERACTIVO (HUD) -->
+            <div id="view-mapa" class="view active">
+                <div class="hud-container">
+                    <div class="hud-panel controls-panel">
+                        <h2>Selección de Sistema</h2>
+                        <p class="subtitle">Haz clic sobre los órganos iluminados.</p>
+                        <ul class="organ-list" id="organ-list">
+                            <li class="active" onclick="mostrarOrgano('cerebro')">🧠 Eje HHA / Estrés</li>
+                            <li onclick="mostrarOrgano('tiroides')">🦋 Tiroides / Metabolismo</li>
+                            <li onclick="mostrarOrgano('vago')">🫁 Estómago / Nervio Vago</li>
+                            <li onclick="mostrarOrgano('pancreas')">⚖️ Páncreas / Insulina</li>
+                            <li onclick="mostrarOrgano('ciatico')">🦵 Ciático / Piramidal</li>
+                        </ul>
+                    </div>
+                    <div class="anatomia-center">
+                        <div class="scanner-grid"></div>
+                        <div class="scanner-line"></div>
+                        <div class="image-wrapper">
+                            <img src="img/cuerpo_holograma.jpg" alt="Holograma Humano" class="hologram-img">
+                            <div class="hotspot" id="hotspot-cerebro" style="top: 8%; left: 43%; width: 15%; height: 12%;" onclick="mostrarOrgano('cerebro')"></div>
+                            <div class="hotspot" id="hotspot-tiroides" style="top: 23%; left: 46%; width: 8%; height: 5%;" onclick="mostrarOrgano('tiroides')"></div>
+                            <div class="hotspot" id="hotspot-vago" style="top: 38%; left: 40%; width: 20%; height: 15%;" onclick="mostrarOrgano('vago')"></div>
+                            <div class="hotspot" id="hotspot-pancreas" style="top: 42%; left: 38%; width: 10%; height: 8%;" onclick="mostrarOrgano('pancreas')"></div>
+                            <div class="hotspot" id="hotspot-ciatico" style="top: 65%; left: 35%; width: 30%; height: 25%;" onclick="mostrarOrgano('ciatico')"></div>
+                        </div>
+                    </div>
+                    <div class="hud-panel data-panel" id="data-panel">
+                        <div class="data-header">
+                            <h1 id="data-title">Cargando...</h1>
+                            <span class="badge" id="data-badge">Sistema</span>
+                        </div>
+                        <div class="view-toggle">
+                            <button id="btn-view-clinica" class="active" onclick="cambiarVistaDatos('clinica')">🩺 Clínica</button>
+                            <button id="btn-view-anatomica" onclick="cambiarVistaDatos('anatomica')">📖 Anatomía</button>
+                        </div>
+                        <div id="data-clinica" class="data-content active">
+                            <div class="data-grid" id="data-grid"></div>
+                        </div>
+                        <div id="data-anatomica" class="data-content">
+                            <div class="anatomia-box">
+                                <h3 id="ana-sistema" class="ana-title">Sistema</h3>
+                                <p class="ana-ref" id="ana-ref">Ref: Netter</p>
+                                <div class="ana-texto" id="ana-texto"></div>
+                                <div class="ana-psico"><h4>🧠 Conexión Psicológica</h4><p id="ana-psico"></p></div>
+                                <div class="ana-patologias"><h4>⚠️ Patologías Relacionadas</h4><ul id="ana-patologias"></ul></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. VÍAS BIOLÓGICAS -->
+            <div id="view-bioquimica" class="view">
+                <div class="module-container">
+                    <div class="module-header"><h2>🧬 Vías Biológicas y Fisiopatología</h2><p class="subtitle">Explorador interactivo.</p></div>
+                    <div class="bio-layout">
+                        <div class="bio-menu">
+                            <button class="bio-menu-btn active" onclick="cargarBio('hha', this)">Eje HHA y Cortisol</button>
+                            <button class="bio-menu-btn" onclick="cargarBio('insulina', this)">Resistencia a la Insulina</button>
+                            <button class="bio-menu-btn" onclick="cargarBio('energia', this)">Glucólisis y Krebs</button>
+                            <button class="bio-menu-btn" onclick="cargarBio('microbiota', this)">Eje Microbiota-Intestino</button>
+                        </div>
+                        <div class="bio-display" id="bio-display"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. MÓDULOS CLÍNICOS (Añadimos Farmacología y Psicoanálisis) -->
+            <div id="view-enciclopedia" class="view">
+                <div class="module-container">
+                    <div class="module-header">
+                        <h2>📚 Enciclopedia Clínica Metabólica</h2>
+                        <p class="subtitle">Abordaje interdisciplinario y evidencia.</p>
+                    </div>
+                    <div class="pathology-tabs" id="pathology-tabs">
+                        <button class="path-tab active" onclick="cargarPatologia('obesidad', this)">Obesidad</button>
+                        <button class="path-tab" onclick="cargarPatologia('resistencia', this)">Resistencia a la Insulina</button>
+                        <button class="path-tab" onclick="cargarPatologia('diabetes', this)">Diabetes Tipo 2</button>
+                        <button class="path-tab" onclick="cargarPatologia('tca', this)">TCA</button>
+                        <button class="path-tab" onclick="cargarPatologia('estres', this)">Estrés Crónico</button>
+                        <button class="path-tab" onclick="cargarPatologia('farmacologia', this)">💊 Farmacología</button>
+                        <button class="path-tab" onclick="cargarPatologia('psicoanalisis', this)">🛋️ Psicoanálisis</button>
+                    </div>
+                    <div class="clinical-dashboard" id="clinical-dashboard"></div>
+                </div>
+            </div>
+
+            <!-- 4. HERRAMIENTAS CLÍNICAS (NUEVO) -->
+            <div id="view-herramientas" class="view">
+                <div class="module-container">
+                    <div class="module-header">
+                        <h2>🧮 Herramientas Clínicas</h2>
+                        <p class="subtitle">Calculadoras y Red de Conexiones Metabólicas.</p>
+                    </div>
+                    
+                    <div class="tools-layout">
+                        <!-- Calculadoras -->
+                        <div class="calc-panel">
+                            <h3>📏 Calculadoras Rápidas</h3>
+                            
+                            <div class="calc-group">
+                                <h4>IMC (Índice de Masa Corporal)</h4>
+                                <div class="input-row">
+                                    <input type="number" id="peso" placeholder="Peso (kg)" step="0.1">
+                                    <input type="number" id="talla" placeholder="Talla (m)" step="0.01">
+                                    <button onclick="calcularIMC()">Calcular</button>
+                                </div>
+                                <div class="calc-result" id="res-imc">--</div>
+                            </div>
+
+                            <div class="calc-group">
+                                <h3>⚖️ HOMA-IR (Resistencia a la Insulina)</h3>
+                                <div class="input-row">
+                                    <input type="number" id="glucemia" placeholder="Glucemia (mg/dL)" step="0.1">
+                                    <input type="number" id="insulina" placeholder="Insulina (µU/mL)" step="0.1">
+                                    <button onclick="calcularHOMA()">Calcular</button>
+                                </div>
+                                <div class="calc-result" id="res-homa">--</div>
+                            </div>
+                        </div>
+
+                        <!-- Mind Map Interactivo -->
+                        <div class="mindmap-panel">
+                            <h3>🕸️ Red de Conexiones Metabólicas</h3>
+                            <p class="w-desc">Haz clic en los nodos para ver cómo se interconectan las áreas.</p>
+                            
+                            <div class="mindmap-container">
+                                <!-- SVG para el Mind Map -->
+                                <svg viewBox="0 0 400 400" id="mindmap-svg">
+                                    <!-- Líneas de conexión (se dibujan dinámicamente en JS o estáticas aquí) -->
+                                    <line x1="200" y1="200" x2="100" y2="100" class="mm-line" />
+                                    <line x1="200" y1="200" x2="300" y2="100" class="mm-line" />
+                                    <line x1="200" y1="200" x2="100" y2="300" class="mm-line" />
+                                    <line x1="200" y1="200" x2="300" y2="300" class="mm-line" />
+                                    <line x1="100" y1="100" x2="300" y2="100" class="mm-line" />
+                                    
+                                    <!-- Nodos -->
+                                    <circle cx="200" cy="200" r="40" class="mm-node center" onclick="mostrarNodo('estres')" />
+                                    <text x="200" y="205" class="mm-text center-text">Estrés</text>
+                                    
+                                    <circle cx="100" cy="100" r="30" class="mm-node" onclick="mostrarNodo('cortisol')" />
+                                    <text x="100" y="105" class="mm-text">Cortisol</text>
+                                    
+                                    <circle cx="300" cy="100" r="30" class="mm-node" onclick="mostrarNodo('insulina')" />
+                                    <text x="300" y="105" class="mm-text">Insulina</text>
+                                    
+                                    <circle cx="100" cy="300" r="30" class="mm-node" onclick="mostrarNodo('emocional')" />
+                                    <text x="100" y="305" class="mm-text">Emocional</text>
+                                    
+                                    <circle cx="300" cy="300" r="30" class="mm-node" onclick="mostrarNodo('grasa')" />
+                                    <text x="300" y="305" class="mm-text">Grasa Visceral</text>
+                                </svg>
+                            </div>
+                            <div class="mindmap-info" id="mm-info">
+                                Selecciona un nodo para ver su impacto clínico.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. EVIDENCIA GRADE -->
+            <div id="view-fisiologia" class="view">
+                <div class="module-container">
+                    <div class="module-header"><h2>🔬 Evidencia Científica y GRADE</h2><p class="subtitle">Síntesis de la revisión sistemática.</p></div>
+                    <div class="grade-layout">
+                        <div class="grade-card main-finding">
+                            <h3>📊 Hallazgo Principal</h3>
+                            <p>Existe una asociación <strong>consistente y positiva</strong> entre el estrés percibido y las conductas alimentarias disfuncionales en adultos con sobrepeso u obesidad.</p>
+                            <div class="data-points">
+                                <div class="dp"><span class="dp-val">r = 0.14 - 0.42</span><span class="dp-desc">Estrés ↔ Alimentación Emocional</span></div>
+                                <div class="dp"><span class="dp-val">β = 0.15</span><span class="dp-desc">Alimentación Emocional ↔ IMC</span></div>
+                            </div>
+                        </div>
+                        <div class="grade-card">
+                            <h3>🧪 Certeza de la Evidencia (GRADE)</h3>
+                            <ul class="grade-bars">
+                                <li><span class="label">Estrés ↔ Alimentación Emocional</span><div class="bar-container"><div class="bar low" style="width: 40%;">BAJA</div></div></li>
+                                <li><span class="label">Estrés ↔ IMC</span><div class="bar-container"><div class="bar low" style="width: 40%;">BAJA</div></div></li>
+                                <li><span class="label">Estrés ↔ Actividad Física</span><div class="bar-container"><div class="bar very-low" style="width: 20%;">MUY BAJA</div></div></li>
+                            </ul>
+                        </div>
+                        <div class="grade-card highlight-gap">
+                            <h3>🚨 Brecha Crítica</h3>
+                            <p>No se identificaron estudios que evalúen la <strong>HRV</strong> como variable de exposición en esta población.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. PROTOCOLO TCC+ACT -->
+            <div id="view-protocolo" class="view">
+                <div class="module-container">
+                    <div class="module-header"><h2>📋 Protocolo INTEGRA-OBESIDAD</h2><p class="subtitle">Manual de Intervención Clínica. 20 sesiones.</p></div>
+                    <div class="protocol-accordion" id="protocol-accordion"></div>
+                </div>
+            </div>
+
+            <!-- 7. PANEL DEL PACIENTE -->
+            <div id="view-paciente" class="view">
+                <div class="module-container">
+                    <div class="module-header"><h2>📊 Panel de Registro y Seguimiento</h2><p class="subtitle">Herramientas para el monitoreo diario.</p></div>
+                    <div class="patient-dashboard">
+                        <div class="p-widget">
+                            <h3>📈 Registro de Mindful Eating</h3>
+                            <div class="slider-group">
+                                <label>Hambre antes de comer:</label>
+                                <div class="slider-row"><input type="range" min="1" max="10" value="5" class="slider" id="hungerSlider"><span class="slider-val" id="hungerValue">5</span></div>
+                            </div>
+                            <div class="slider-group">
+                                <label>Saciedad después de comer:</label>
+                                <div class="slider-row"><input type="range" min="1" max="10" value="5" class="slider" id="satietySlider"><span class="slider-val" id="satietyValue">5</span></div>
+                            </div>
+                        </div>
+                        <div class="p-widget">
+                            <h3>📝 Notas de Sesión</h3>
+                            <textarea id="clinical-notes" placeholder="Escribe aquí observaciones clínicas..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+    <script src="js/anatomia-db.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
